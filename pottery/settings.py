@@ -120,4 +120,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = "/create/"
 LOGOUT_REDIRECT_URL = "/account/login/"
 
-PRINTERNAME = "Star_TSP143__STR_T_001_"
+PRINTERNAME = "Receipt_Printer"
+OUTPUT_LOCATION = '/Users/peterlambro/Desktop/CSV'
