@@ -1,17 +1,17 @@
 Newburgh Pottery Ticket 
 
-Jason Lambro 
+Winston Zeddemore 
 
 Member 
 
-L4 H3 W4 
+L2 H2 W2 
 
-TotalCost: 19.20 
+TotalCost: 0.40 
 
-Quantity: 8 
+Quantity: 1 
 
-Created: 2022-09-23 02:26:24.909851+00:00 
+Created: 2022-09-24 15:01:28.069038+00:00 
 
-Ticket ID: 32
+Ticket ID: 34
 
  

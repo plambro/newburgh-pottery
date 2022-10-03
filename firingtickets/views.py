@@ -1,6 +1,5 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404
-from django.template import loader
+from django.shortcuts import render
+from django.http import HttpResponse
 
 from .models import Project
 from .forms import ProjectForm
@@ -10,15 +9,6 @@ from datetime import datetime
 import csv
 from collections import defaultdict
 
-def index(request):
-    projects = Project.objects.order_by('-created')
-    template = loader.get_template('firingtickets/index.html')
-    context = {'projects': projects}
-    return HttpResponse(template.render(context, request))
-
-def detail(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
-    return render(request, 'firingtickets/detail.html', {'project': project})
 
 def create(request):
     context = {}
