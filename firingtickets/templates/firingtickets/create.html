@@ -3,11 +3,13 @@
 {% block title %}Create Firing Ticket{% endblock %}
 
 {% block content %}
-<p>All details must be entered in order to generate a firing ticket. Please confirm all details before submitting. If you need any help please speak to David or any staff member.</p>
+<p id="header">All details must be entered in order to generate a firing ticket. Please confirm all details before submitting. If you need any help please speak to David or any staff member.</p>
 <br>
+<div id="form-box">
 <form action="" method="post">
 	{% csrf_token %}
 	{{ form.as_p }}
 	<input type="submit" value="Save and Print">
 </form>
+</div>
 {% endblock %}
