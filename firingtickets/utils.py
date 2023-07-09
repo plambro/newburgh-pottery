@@ -1,11 +1,6 @@
 import cups
-import os
 import pottery.settings as settings
 from django.utils.timezone import now as django_now
-from collections import defaultdict
-import csv
-import subprocess
-import logging
 
 def print_ticket(ticket):
     try:

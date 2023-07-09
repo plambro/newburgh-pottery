@@ -23,7 +23,7 @@ class Project(models.Model):
     created = models.DateTimeField()
 
     def __str__(self):
-        return f'Name: {self.name}, Created: {self.created.date()}, Description: {self.description}'
+        return f'Name: {self.first_name} {self.last_name}, Created: {self.created.date()}, Description: {self.description}'
 
     def total_cost(self):
         cost = str(round(((self.length * self.height * self.width) * 0.05 * self.quantity), 2))

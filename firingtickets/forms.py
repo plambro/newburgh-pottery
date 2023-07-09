@@ -6,20 +6,22 @@ class ProjectForm(ModelForm):
 
     class Meta:
         model = Project
-        fields = ['name', 'membership', 'description', 'length', 'width', 'height', 'quantity']
+        fields = ['first_name', 'last_name', 'membership', 'description', 'length', 'width', 'height', 'quantity']
         labels = {
-            'name': _('Name'),
+            'first_name': _('First Name'),
+            'last_name': _('Last Name'),
             'membership': _('Membership Status')
         }
         help_texts = {
-            'name': _('Your full name.'),
+            'first_name': _('Your first name.'),
+            'last_name': _('Your last name.'),
             'description': _('Optional. A brief project description.'),
             'length': _('Length in inches, minimum 2".'),
             'width': _('Width in inches, minimum 2".'),
             'height': _('Height in inches, minimum 2".')
         }
         error_messages = {
-            'name': {
+            'first_name': {
                 'max_length': _("This writer's name is too long."),
             },
         }
