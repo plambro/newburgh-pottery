@@ -14,10 +14,9 @@ def split_names(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        # Add any dependencies if required
+       ('firingtickets', '0009_auto_20230709_0101'), 
     ]
 
     operations = [
-        migrations.RunPython(split_names),
-        migrations.RemoveField('Project', 'name'),
+        migrations.RunPython(split_names)
     ]
