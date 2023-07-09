@@ -12,6 +12,7 @@ class Project(models.Model):
     GUEST = 'Guest'
     MEMBERSHIP_CHOICES = [(MEMBER, 'Member'),(STUDENT, 'Student'),(GUEST, 'Guest')]
 
+    name = models.CharField(max_length=32, null=True)
     first_name = models.CharField(max_length=32, null=False, default='')
     last_name = models.CharField(max_length=32, null=False, default='')
     membership = models.CharField(max_length=32, choices=MEMBERSHIP_CHOICES, default='Member')
