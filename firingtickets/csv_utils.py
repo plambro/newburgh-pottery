@@ -21,8 +21,9 @@ def calculate_project_totals(projects):
     totals = defaultdict(lambda: {'cost': 0.0, 'quantity': 0})
     for project in projects:
         cost = float(project.total_cost())
-        totals[project.name]['cost'] += cost
-        totals[project.name]['quantity'] += project.quantity
+        name = f'{project.first_name} {project.last_name}'
+        totals[name]['cost'] += cost
+        totals[name]['quantity'] += project.quantity
     return totals
 
 def write_totals_to_csv(totals, output_location, output_filename):
@@ -42,7 +43,7 @@ def write_itemized_to_csv(projects, output_location, output_filename):
         writer.writerow(headers)
         for project in projects:
             writer.writerow([
-                project.name,
+                f'{project.first_name} {project.last_name}',
                 project.description,
                 f'{project.length} x {project.width} x {project.height}',
                 project.quantity,

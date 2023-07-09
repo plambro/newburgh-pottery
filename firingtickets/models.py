@@ -50,5 +50,5 @@ class Project(models.Model):
         self.last_name = self.last_name.capitalize()
 
         super().save(*args, **kwargs)
-       #self.receipt()
+        self.receipt()
 
