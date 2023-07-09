@@ -18,5 +18,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(split_names)
+        migrations.RunPython(split_names),
+        migrations.RemoveField('Project', 'name')
     ]
