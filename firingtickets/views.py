@@ -3,6 +3,7 @@ from django.http import HttpResponse
 
 from .models import Project
 from .forms import ProjectForm
+from .utils import *
 import pottery.settings as settings
 
 from datetime import datetime
@@ -10,6 +11,9 @@ import csv
 from collections import defaultdict
 import subprocess
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 def create(request):
     context = {}
@@ -28,64 +32,34 @@ def create(request):
 
 def get_monthly_report(request):
     now = datetime.now()
-    if now.month == 1:
-        month = 12
-    else:
-        month = now.month - 1
-    if now.month == 1:
-        year = now.year - 1
-    else:
-        year = now.year
-    output_filename = f'{month}_{year}_totals.csv'
+    month, year = get_previous_month(now.month, now.year)
     output_location = settings.OUTPUT_LOCATION
-    projects = Project.objects.filter(created__month=month)
-    costs = defaultdict(float)
-    quantities = defaultdict(int)
-    names = []
-    costs.setdefault('missing_key', 0.0)
-    quantities.setdefault('missing_key', 0)
-    for project in projects:
-        costs[project.name] += float(project.total_cost())
-        quantities[project.name] += project.quantity
-        if project.name not in names:
-            names.append(project.name)
-    headers = ['Name', 'Total Cost', 'Quantity']
-    with open(f'{output_location}/{output_filename}', 'w') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(headers)
-        for name in names:
-            cost = str(round(costs[name], 2))
-            cents = cost.split('.')[1]
-            if len(cents) < 2:
-                cost += '0'
-            writer.writerow([name, f'${cost}', quantities[name]])
-    command = ['rclone', 'copy', f'{output_location}/{output_filename}', 'googledrive:']
-    subprocess.run(command)
-    os.remove(f'{output_location}/{output_filename}')
+    member_projects = get_projects_in_month(month, year, Project.MEMBER)
+    student_projects = get_projects_in_month(month, year, Project.STUDENT)
+    member_totals = calculate_project_totals(member_projects)
+    student_totals = calculate_project_totals(student_projects)
+    # Write member_totals to member_projects.csv
+    write_totals_to_csv(member_totals, output_location, f'{month}_{year}_totals_member_projects.csv')
+    # Write student_totals to student_projects.csv
+    write_totals_to_csv(student_totals, output_location, f'{month}_{year}_totals_student_projects.csv')
+    upload_to_google_drive(output_location, f'{month}_{year}_totals_member_projects.csv')
+    upload_to_google_drive(output_location, f'{month}_{year}_totals_student_projects.csv')
+    delete_file(os.path.join(output_location, f'{month}_{year}_totals_member_projects.csv'))
+    delete_file(os.path.join(output_location, f'{month}_{year}_totals_student_projects.csv'))
     return HttpResponse('OK')
 
 def get_detailed_report(request):
     now = datetime.now()
-    if now.month == 1:
-        month = 12
-    else:
-        month = now.month - 1
-    if now.month == 1:
-        year = now.year - 1
-    else:
-        year = now.year
-    output_filename = f'{month}_{year}_itemized.csv'
+    month, year = get_previous_month(now.month, now.year)
     output_location = settings.OUTPUT_LOCATION
-    projects = Project.objects.filter(created__month=month).order_by('name')
-    headers = ['Name', 'Description', 'Dimensions', 'Quantity', 'Cost', 'Date']
-    with open(f'{output_location}/{output_filename}', 'w') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(headers)
-        for project in projects:
-            writer.writerow([project.name, project.description, 
-                             f'{str(project.length)} x {str(project.width)} x {str(project.height)}',
-                             project.quantity, f'${project.total_cost()}', project.created.date()])
-    command = ['rclone', 'copy', f'{output_location}/{output_filename}', 'googledrive:']
-    subprocess.run(command)
-    os.remove(f'{output_location}/{output_filename}')
+    member_projects = get_projects_in_month(month, year, Project.MEMBER)
+    student_projects = get_projects_in_month(month, year, Project.STUDENT)
+    # Write member_totals to member_projects.csv
+    write_itemized_to_csv(member_projects, output_location, f'{month}_{year}_itemized_member_projects.csv')
+    # Write student_totals to student_projects.csv
+    write_itemized_to_csv(student_projects, output_location, f'{month}_{year}_itemized_student_projects.csv')
+    upload_to_google_drive(output_location, f'{month}_{year}_itemized_member_projects.csv')
+    upload_to_google_drive(output_location, f'{month}_{year}_itemized_student_projects.csv')
+    delete_file(os.path.join(output_location, f'{month}_{year}_itemized_member_projects.csv'))
+    delete_file(os.path.join(output_location, f'{month}_{year}_itemized_student_projects.csv'))
     return HttpResponse('OK')

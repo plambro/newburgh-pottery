@@ -12,7 +12,8 @@ class Project(models.Model):
     GUEST = 'Guest'
     MEMBERSHIP_CHOICES = [(MEMBER, 'Member'),(STUDENT, 'Student'),(GUEST, 'Guest')]
 
-    name = models.CharField(max_length=32, null=False)
+    first_name = models.CharField(max_length=32, null=False, default='')
+    last_name = models.CharField(max_length=32, null=False, default='')
     membership = models.CharField(max_length=32, choices=MEMBERSHIP_CHOICES, default='Member')
     description = models.CharField(max_length=64, null=True)
     length = models.IntegerField(null=False)
@@ -43,6 +44,11 @@ class Project(models.Model):
             self.height = 2
         if not self.created:
             self.created = django_now()
+
+        # capitalize first and last name on save
+        self.first_name = self.first_name.capitalize()
+        self.last_name = self.last_name.capitalize()
+
         super().save(*args, **kwargs)
-        self.receipt()
+       #self.receipt()
 

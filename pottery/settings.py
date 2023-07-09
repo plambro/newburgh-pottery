@@ -120,3 +120,36 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 PRINTERNAME = "TSP143-(STR_T-001)"
 OUTPUT_LOCATION = '/home/david/Desktop/outputs'
+
+# Configure logging
+LOG_DIR = os.path.join(BASE_DIR, 'logs')  # Define the directory for log files
+
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'project.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'style': '{',
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'DEBUG',
+    },
+}
