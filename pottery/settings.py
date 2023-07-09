@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-d_09w4e-!gf#y)mafwf6o2*96ccylbs6)b6m9)b!n)!#^)ittg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -111,12 +111,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-PRINTERNAME = "Receipt_Printer"
-OUTPUT_LOCATION = ''
+PRINTERNAME = "TSP143-(STR_T-001)"
+OUTPUT_LOCATION = '/home/david/Desktop/outputs'

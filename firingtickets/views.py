@@ -8,7 +8,8 @@ import pottery.settings as settings
 from datetime import datetime
 import csv
 from collections import defaultdict
-
+import subprocess
+import os
 
 def create(request):
     context = {}
@@ -30,7 +31,7 @@ def get_monthly_report(request):
     if now.month == 1:
         month = 12
     else:
-        month = now.month
+        month = now.month - 1
     if now.month == 1:
         year = now.year - 1
     else:
@@ -58,6 +59,9 @@ def get_monthly_report(request):
             if len(cents) < 2:
                 cost += '0'
             writer.writerow([name, f'${cost}', quantities[name]])
+    command = ['rclone', 'copy', f'{output_location}/{output_filename}', 'googledrive:']
+    subprocess.run(command)
+    os.remove(f'{output_location}/{output_filename}')
     return HttpResponse('OK')
 
 def get_detailed_report(request):
@@ -65,7 +69,7 @@ def get_detailed_report(request):
     if now.month == 1:
         month = 12
     else:
-        month = now.month
+        month = now.month - 1
     if now.month == 1:
         year = now.year - 1
     else:
@@ -81,4 +85,7 @@ def get_detailed_report(request):
             writer.writerow([project.name, project.description, 
                              f'{str(project.length)} x {str(project.width)} x {str(project.height)}',
                              project.quantity, f'${project.total_cost()}', project.created.date()])
+    command = ['rclone', 'copy', f'{output_location}/{output_filename}', 'googledrive:']
+    subprocess.run(command)
+    os.remove(f'{output_location}/{output_filename}')
     return HttpResponse('OK')
