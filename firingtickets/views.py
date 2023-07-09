@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from .models import Project
 from .forms import ProjectForm
-from .utils import *
+from .csv_utils import *
 import pottery.settings as settings
 
 from datetime import datetime
